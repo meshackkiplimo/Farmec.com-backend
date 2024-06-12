@@ -3,7 +3,7 @@ const categoryItemSchema =new mongoose.Schema({
     name:{type:String,required:true},
     price:{type:Number,required:true}
 })
-
+  
 const rentSchema=  new mongoose.Schema({
 
     user:{type:mongoose.Schema.Types.ObjectId,ref:"User"},

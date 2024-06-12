@@ -9,7 +9,9 @@ const createMyRent = async (req:Request,res:Response) =>{
     try{
         const existingRent=await Rent.findOne({user:req.userId})
         if(existingRent){
-            return res.status(409).json({message:"user platform already exist" })
+            return res
+            .status(409)
+             .json({message:"user platform already exist" })
         }
 
         const image=  req.file as  Express.Multer.File;

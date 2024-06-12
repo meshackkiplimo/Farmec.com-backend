@@ -11,7 +11,7 @@ const storage = multer.memoryStorage()
 const upload = multer({ 
     storage: storage,
     limits:{
-        fileSize: 1024 * 1024 * 5
+        fileSize: 5 * 1024 * 1024
     }
 
 })
@@ -24,7 +24,6 @@ router.post(
     validateMyRentRequest,
     jwtCheck,
     jwtParse,
-   
     MyRentController.createMyRent
 )
 export default router
