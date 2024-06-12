@@ -15,7 +15,8 @@ const upload = multer({
     }
 
 })
-//api restaurant
+//api rent
+router.get("/",jwtCheck,jwtParse,MyRentController.getMyRent)
 
 
 router.post(

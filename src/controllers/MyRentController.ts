@@ -5,6 +5,22 @@ import cloudinary from "cloudinary"
 import mongoose from "mongoose"
 
 
+const getMyRent =  async (req:Request,res:Response) =>{
+    try{
+        const rent = await Rent.findOne({user:req.userId})
+        if(!rent){
+            return res.status(404).json({message:"rent not found"})
+        }
+        res.json(rent)
+
+    } catch(error){
+        console.log(error)
+        res.status(500).json({message:"error fetching rent"})
+    }
+
+}
+
+
 const createMyRent = async (req:Request,res:Response) =>{
     try{
         const existingRent=await Rent.findOne({user:req.userId})
@@ -34,6 +50,7 @@ const createMyRent = async (req:Request,res:Response) =>{
 }
 
 export default {
+    getMyRent,
 
     createMyRent,
 }
