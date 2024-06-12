@@ -48,7 +48,22 @@ const createMyRent = async (req:Request,res:Response) =>{
     }
 
 }
-
+const updateMyRent = async (req: Request, res: Response) => {
+    try {
+      const rent = await Rent.findOne({
+        user: req.userId,
+      });
+  
+      if (!rent) {
+        return res.status(404).json({ message: "rent not found" });
+      }
+      rent.rentName =req.body.rentName
+      rent.city =req.body.county
+    }catch(error){
+        console.log(error)
+        res.status(500).json({message:"something went wrong"})
+    }
+}
 export default {
     getMyRent,
 

@@ -27,4 +27,12 @@ router.post(
     jwtParse,
     MyRentController.createMyRent
 )
+router.put(
+    "/",
+    upload.single("imageFile"),
+    validateMyRentRequest,
+    jwtCheck,
+    jwtParse,
+    MyRentController.updateMyRent
+)
 export default router
