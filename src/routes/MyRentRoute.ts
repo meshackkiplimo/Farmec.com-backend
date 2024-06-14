@@ -16,6 +16,9 @@ const upload = multer({
 
 })
 //api rent
+
+
+
 router.get("/",jwtCheck,jwtParse,MyRentController.getMyRent)
 
 
@@ -26,5 +29,13 @@ router.post(
     jwtCheck,
     jwtParse,
     MyRentController.createMyRent
+)
+router.put(
+    "/",
+    upload.single("imageFile"),
+    validateMyRentRequest,
+    jwtCheck,
+    jwtParse,
+    MyRentController.updateMyRent
 )
 export default router
