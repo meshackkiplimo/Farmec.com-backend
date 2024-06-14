@@ -16,6 +16,9 @@ const upload = multer({
 
 })
 //api rent
+
+
+
 router.get("/",jwtCheck,jwtParse,MyRentController.getMyRent)
 
 
