@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import myUserRoute from './routes/MyUserRoute'
 import {v2 as cloudinary} from "cloudinary"
 import myRentRoute from"./routes/MyRentRoute"
+import rentRoute from "./routes/RentRoute"
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string) .
 then(()=>console.log("connected to the database"))
@@ -27,6 +28,7 @@ app.get("/health",async(req:Request,res:Response) =>{
   
 app.use("/api/my/user",myUserRoute)
 app.use("/api/my/rent",myRentRoute)
+app.use("/api/rent",rentRoute)
   app.listen(7000,()=>{
     console.log("server is running on port 7000")
   })
