@@ -1,6 +1,23 @@
 import {Request,Response} from "express"
 import Rent from "../models/rent"
 
+
+const getRent = async (req:Request,res:Response) =>{
+
+    try {
+        const rentId = req.params.rentId
+        const rent = await Rent.findById(rentId)
+        if(!rent){
+            return res.status(404).json({message:"Rent not found"})
+        }
+        res.json(rent)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:"something went wrong"})
+        
+    }
+}
+
 const searchRent = async (req:Request,res:Response) => {
 
     try {
@@ -71,5 +88,8 @@ const searchRent = async (req:Request,res:Response) => {
 }
 
 export default{
+    getRent,
     searchRent,
+
+
 }
