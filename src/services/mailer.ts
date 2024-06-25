@@ -11,17 +11,14 @@ const authClient = new OAuth2(clientId, clientSecret, redirectUrl);
 
 /**
  * Function to send an email using Gmail API
- * @param ss - Unused parameter
  * @param content - Content of the email
  * @param to - Recipient email address
  * @param from - Sender email address
  * @param subject - Email subject
  * @param cb - Callback function to handle response
  */
-export function sendNyongiotMail(content: string, to: any, from: any, subject: any, cb: any) {
+export const sendMail = (content: string, to: any, from: any, subject: any, cb: any) => {
 
-
-    // Set credentials with access_token, refresh_token, and other details
     authClient.setCredentials({
         "access_token": "ya29.a0AXooCgusk436jQCM1toGb8Ysm00muh2C0S7FNGHBPQeeH-9J74XaTduDK7PfIbu-I0dndRwlws2-ROGllgR1lmLTV0Ju2rNYvLZ1DszYfPScTsS14OcdpeM1tUhFYWhqu7vWd9_HG6b-d2AGrc-hVZFqwNwKIubRe2liaCgYKAf8SARASFQHGX2Mi7w2eS5_5rTAJSWRoHKSYLQ0171",
         "refresh_token": "1//09HEtbL4826bgCgYIARAAGAkSNwF-L9IrKN8OWIUM9kp2TooOONJoKqDA8ci5xxiLfr53XtZVGPE27DI5q2dQs7jkQALvgRImH9w",
@@ -29,12 +26,9 @@ export function sendNyongiotMail(content: string, to: any, from: any, subject: a
         "token_type": "Bearer"
     });
 
-    // Check if the access token has expired
     if (isAccessTokenExpired(authClient)) {
-        // Access token expired, refresh it
         refreshAccessToken(authClient)
             .then(() => {
-                // Once refreshed, send the email
                 sendEmail(authClient, content, to, from, subject, cb);
             })
             .catch(err => {
@@ -42,7 +36,6 @@ export function sendNyongiotMail(content: string, to: any, from: any, subject: a
                 cb(err);
             });
     } else {
-        // Access token is still valid, directly send the email
         sendEmail(authClient, content, to, from, subject, cb);
     }
 }
@@ -52,7 +45,7 @@ export function sendNyongiotMail(content: string, to: any, from: any, subject: a
  * @param authClient - OAuth2 client instance
  * @returns true if access token is expired, false otherwise
  */
-function isAccessTokenExpired(authClient: Auth.OAuth2Client): boolean {
+const isAccessTokenExpired = (authClient: Auth.OAuth2Client): boolean => {
     const expiryDate = authClient.credentials.expiry_date;
     if (!expiryDate) {
         return true; // No expiry date means token is considered expired
@@ -65,7 +58,7 @@ function isAccessTokenExpired(authClient: Auth.OAuth2Client): boolean {
  * @param authClient - OAuth2 client instance
  * @returns Promise<void>
  */
-function refreshAccessToken(authClient: Auth.OAuth2Client): Promise<void> {
+const refreshAccessToken = (authClient: Auth.OAuth2Client): Promise<void> => {
     return new Promise<void>((resolve, reject) => {
         authClient.refreshAccessToken((err, tokens) => {
             if (err) {
@@ -86,7 +79,7 @@ function refreshAccessToken(authClient: Auth.OAuth2Client): Promise<void> {
  * @param subject - Email subject
  * @param cb - Callback function to handle response
  */
-function sendEmail(authClient: Auth.OAuth2Client, content: string, to: any, from: any, subject: any, cb: any) {
+const sendEmail = (authClient: Auth.OAuth2Client, content: string, to: any, from: any, subject: any, cb: any) => {
     let emailLines = [
         `Content-Type: text/plain; charset="UTF-8"`,
         `MIME-Version: 1.0`,

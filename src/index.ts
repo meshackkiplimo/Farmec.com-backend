@@ -1,21 +1,21 @@
-import express,{Request,Response} from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import "dotenv/config";
 import mongoose from "mongoose";
 import myUserRoute from './routes/MyUserRoute'
-import {v2 as cloudinary} from "cloudinary"
-import myRentRoute from"./routes/MyRentRoute"
+import { v2 as cloudinary } from "cloudinary"
+import myRentRoute from "./routes/MyRentRoute"
 import rentRoute from "./routes/RentRoute"
 import orderRoute from "./routes/OrderRoute"
-
-mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string) .
-then(()=>console.log("connected to the database"))
+import ContactUs from './routes/ContactUs'
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string).
+  then(() => console.log("connected to the database"))
 
 cloudinary.config({
 
-  cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
-  api_key:process.env.CLOUDINARY_API_KEY,
-  api_secret:process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 
 })
 
@@ -34,6 +34,7 @@ app.use("/api/my/user",myUserRoute)
 app.use("/api/my/rent",myRentRoute)
 app.use("/api/rent",rentRoute)
 app.use("api/order",orderRoute)
+app.use("/api/my/contact", ContactUs)
   app.listen(7000,()=>{
     console.log("server is running on port 7000")
   })
