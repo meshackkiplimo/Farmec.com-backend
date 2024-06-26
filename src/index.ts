@@ -6,6 +6,7 @@ import myUserRoute from './routes/MyUserRoute'
 import {v2 as cloudinary} from "cloudinary"
 import myRentRoute from"./routes/MyRentRoute"
 import rentRoute from "./routes/RentRoute"
+import orderRoute from "./routes/OrderRoute"
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string) .
 then(()=>console.log("connected to the database"))
@@ -20,8 +21,11 @@ cloudinary.config({
 
 
 const app =express();
-app.use(express.json())
+
 app.use(cors());
+
+app.use("/api/order/checkout/webhook",express.raw({type: "*/*" }))
+app.use(express.json())
 app.get("/health",async(req:Request,res:Response) =>{
   res.send({message:"Health is ok"})
 })
@@ -29,6 +33,7 @@ app.get("/health",async(req:Request,res:Response) =>{
 app.use("/api/my/user",myUserRoute)
 app.use("/api/my/rent",myRentRoute)
 app.use("/api/rent",rentRoute)
+app.use("api/order",orderRoute)
   app.listen(7000,()=>{
     console.log("server is running on port 7000")
   })
