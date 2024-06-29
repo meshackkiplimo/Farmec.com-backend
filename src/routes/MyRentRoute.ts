@@ -15,6 +15,18 @@ const upload = multer({
     }
 
 })
+router.get(
+    "/order",
+    jwtCheck,
+    jwtParse,
+    MyRentController.getMyRentOrders
+  );
+  router.patch(
+    "/order/:orderId/status",
+    jwtCheck,
+    jwtParse,
+    MyRentController.updateOrderStatus
+  )
 //api rent
 
 

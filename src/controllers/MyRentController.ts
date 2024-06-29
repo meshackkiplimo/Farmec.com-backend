@@ -3,6 +3,7 @@ import Rent from "../models/rent"
 import cloudinary from "cloudinary"
 // import Rent from "../models/rent"
 import mongoose from "mongoose"
+import Order from "../models/order"
 
 
 const getMyRent =  async (req:Request,res:Response) =>{
@@ -77,6 +78,53 @@ const updateMyRent = async (req: Request, res: Response) => {
         res.status(500).json({message:"something went wrong"})
     }
 }
+
+const getMyRentOrders = async (req: Request, res: Response) => {
+    try {
+      const rent = await Rent.findOne({ user: req.userId });
+      if (!rent) {
+        return res.status(404).json({ message: "rent not found" });
+      }
+  
+      const orders = await Order.find({ rent: rent._id })
+        .populate("restaurant")
+        .populate("user");
+  
+      res.json(orders);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "something went wrong" });
+    }
+  };
+  
+  const updateOrderStatus = async (req: Request, res: Response) => {
+    try {
+      const { orderId } = req.params;
+      const { status } = req.body;
+  
+      const order = await Order.findById(orderId);
+      if (!order) {
+        return res.status(404).json({ message: "order not found" });
+      }
+  
+      const rent = await Rent.findById(order.rent);
+  
+      if (rent?.user?._id.toString() !== req.userId) {
+        return res.status(401).send();
+      }
+  
+      order.status = status;
+      await order.save();
+  
+      res.status(200).json(order);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "unable to update order status" });
+    }
+  };
+
+
+
 const uploadImage =  async (file:Express.Multer.File) =>{
     const image= file
     const base64Image = Buffer.from(image.buffer).toString("base64")
@@ -86,6 +134,8 @@ const uploadImage =  async (file:Express.Multer.File) =>{
 
 }
 export default {
+    updateOrderStatus,
+    getMyRentOrders,
     getMyRent,
 
     createMyRent,
