@@ -87,7 +87,7 @@ const getMyRentOrders = async (req: Request, res: Response) => {
       }
   
       const orders = await Order.find({ rent: rent._id })
-        .populate("restaurant")
+        .populate("rent")
         .populate("user");
   
       res.json(orders);
