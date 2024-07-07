@@ -7,7 +7,8 @@ const router = express.Router();
 router.get("/", jwtCheck, jwtParse, OrderController.getMyOrders);
 
 
-router.post("/checkout/create-checkout-session",
+router.post(
+    "/api/order/checkout/create-checkout-session",
     jwtCheck,
     jwtParse,
     OrderController.createCheckoutSession

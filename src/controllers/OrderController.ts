@@ -1,12 +1,11 @@
 import Stripe from "stripe";
-import {Request,Response} from "express"
+import { Request, Response } from "express";
 import Rent, { CategoryItemType } from "../models/rent";
 import Order from "../models/order";
 
-const STRIPE = new Stripe(process.env.STRIPE_API_KEY as string)
-const FRONTEND_URL = process.env.FRONTEND_URL  as string
-const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_WEBHOOK_SECRET as string
-
+const STRIPE = new Stripe(process.env.STRIPE_API_KEY as string);
+const FRONTEND_URL = process.env.FRONTEND_URL as string;
+const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_WEBHOOK_SECRET as string;
 
 const getMyOrders = async (req: Request, res: Response) => {
   try {
@@ -21,21 +20,20 @@ const getMyOrders = async (req: Request, res: Response) => {
   }
 };
 
-type  CheckoutSessionRequest ={
-    cartItems:{
-        categoryItemId:string
-        name: string
-        quantity:string
-    }[]
-    deliveryDetails:{
-        email:string
-        name:string
-        addressLine1:string
-        city:string
-
-    }
-    rentId:string
-}
+type CheckoutSessionRequest = {
+  cartItems: {
+    categoryItemId: string;
+    name: string;
+    quantity: string;
+  }[];
+  deliveryDetails: {
+    email: string;
+    name: string;
+    addressLine1: string;
+    city: string;
+  };
+  rentId: string;
+};
 
 const stripeWebhookHandler = async (req: Request, res: Response) => {
   let event;
@@ -68,24 +66,18 @@ const stripeWebhookHandler = async (req: Request, res: Response) => {
   res.status(200).send();
 };
 
-
-
-
-
-
-
-
-const  createCheckoutSession = async(req:Request,res:Response)=>{
-try {
-    const checkoutSessionRequest : CheckoutSessionRequest =req.body
+const createCheckoutSession = async (req: Request, res: Response) => {
+  try {
+    const checkoutSessionRequest: CheckoutSessionRequest = req.body;
 
     const rent = await Rent.findById(
-        checkoutSessionRequest.rentId
-    )
+      checkoutSessionRequest.rentId
+    );
+
     if (!rent) {
-        throw new Error("Rent not found")
+      throw new Error("Rent not found");
     }
-    
+
     const newOrder = new Order({
       rent: rent,
       user: req.userId,
@@ -96,94 +88,93 @@ try {
     });
 
     const lineItems = createLineItems(
-        checkoutSessionRequest,
-        rent.categoryItems
-    )
+      checkoutSessionRequest,
+      rent.categoryItems
+    );
+
     const session = await createSession(
-        lineItems,
-        newOrder._id.toString(),
-        rent.deliveryPrice,
-        rent._id.toString()
-    )
+      lineItems,
+      newOrder._id.toString(),
+      rent.deliveryPrice,
+      rent._id.toString()
+    );
 
-    if(!session.url){
-        return res.status(500).json({message:"Error creating Stripe session"})
-        
+    if (!session.url) {
+      return res.status(500).json({ message: "Error creating stripe session" });
     }
-    await newOrder.save()
-    res.json({url:session.url})
 
-    
-} catch (error:any) {
-    console.log(error)
-    res.status(500).json({message:error.raw.message})
-    
-}
+    await newOrder.save();
+    res.json({ url: session.url });
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json({ message: error.raw.message });
+  }
+};
 
-}
-const createLineItems =(
-    checkoutSessionRequest:CheckoutSessionRequest,
-    categoryItems:CategoryItemType[]
+const createLineItems = (
+  checkoutSessionRequest: CheckoutSessionRequest,
+  categoryItems: CategoryItemType[]
+) => {
+  const lineItems = checkoutSessionRequest.cartItems.map((cartItem) => {
+    const categoryItem = categoryItems.find(
+      (item) => item._id.toString() === cartItem.categoryItemId.toString()
+    );
 
-)=>{
+    if (!categoryItem) {
+      throw new Error(`Category item not found: ${cartItem.categoryItemId}`);
+    }
 
-    const lineItems = checkoutSessionRequest.cartItems.map((cartItem) => {
-        const categoryItem = categoryItems.find(
-          (item) => item._id.toString() === cartItem.categoryItemId.toString()
-        );
-    
-        if (!categoryItem) {
-            throw new Error(`Category item not found: ${cartItem.categoryItemId}`);
-          }
-          const line_item: Stripe.Checkout.SessionCreateParams.LineItem = {
-            price_data: {
-              currency: "usd",
-              unit_amount: categoryItem.price,
-              product_data: {
-                name: categoryItem.name,
-              },
-            },
-            quantity: parseInt(cartItem.quantity),
-          };
-          return line_item
-})
-return lineItems
+    const line_item: Stripe.Checkout.SessionCreateParams.LineItem = {
+      price_data: {
+        currency: "gbp",
+        unit_amount: categoryItem.price,
+        product_data: {
+          name: categoryItem.name,
+        },
+      },
+      quantity: parseInt(cartItem.quantity),
+    };
 
-}
+    return line_item;
+  });
+
+  return lineItems;
+};
+
 const createSession = async (
-    lineItems: Stripe.Checkout.SessionCreateParams.LineItem[],
-    orderId: string,
-    deliveryPrice: number,
-    rentId: string
-  ) => {
-    const sessionData = await STRIPE.checkout.sessions.create({
-      line_items: lineItems,
-      shipping_options: [
-        {
-          shipping_rate_data: {
-            display_name: "Delivery",
-            type: "fixed_amount",
-            fixed_amount: {
-              amount: deliveryPrice,
-              currency: "gbp",
-            },
+  lineItems: Stripe.Checkout.SessionCreateParams.LineItem[],
+  orderId: string,
+  deliveryPrice: number,
+  rentId: string
+) => {
+  const sessionData = await STRIPE.checkout.sessions.create({
+    line_items: lineItems,
+    shipping_options: [
+      {
+        shipping_rate_data: {
+          display_name: "Delivery",
+          type: "fixed_amount",
+          fixed_amount: {
+            amount: deliveryPrice,
+            currency: "gbp",
           },
         },
-      ],
-      mode: "payment",
-      metadata: {
-        orderId,
-        rentId,
       },
-      success_url: `${FRONTEND_URL}/order-status?success=true`,
-      cancel_url: `${FRONTEND_URL}/detail/${rentId}?cancelled=true`,
-    });
-  
-    return sessionData;
-  };
-  export default{
-    getMyOrders,
-    createCheckoutSession,
-    stripeWebhookHandler,
-  }
-  
+    ],
+    mode: "payment",
+    metadata: {
+      orderId,
+      rentId,
+    },
+    success_url: `${FRONTEND_URL}/order-status?success=true`,
+    cancel_url: `${FRONTEND_URL}/detail/${rentId}?cancelled=true`,
+  });
+
+  return sessionData;
+};
+
+export default {
+  getMyOrders,
+  createCheckoutSession,
+  stripeWebhookHandler,
+};
