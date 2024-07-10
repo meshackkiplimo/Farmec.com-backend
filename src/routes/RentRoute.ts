@@ -3,7 +3,8 @@ import {param} from "express-validator"
 import RentController from "../controllers/RentController"
 
 const router = express.Router()
-router.get("/:rentId",
+router.get(
+  "/:rentId",
   param("rentId")
 .isString()
 .trim()

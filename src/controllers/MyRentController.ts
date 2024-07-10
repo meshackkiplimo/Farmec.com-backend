@@ -15,7 +15,7 @@ const getMyRent =  async (req:Request,res:Response) =>{
         res.json(rent)
 
     } catch(error){
-        console.log(error)
+        console.log("error", error)
         res.status(500).json({message:"error fetching rent"})
     }
 

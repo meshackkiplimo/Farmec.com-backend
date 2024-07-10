@@ -8,8 +8,9 @@ import myRentRoute from"./routes/MyRentRoute"
 import rentRoute from "./routes/RentRoute"
 import orderRoute from "./routes/OrderRoute"
 
-mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string) .
-then(()=>console.log("connected to the database"))
+mongoose
+.connect(process.env.MONGODB_CONNECTION_STRING as string) 
+.then(()=>console.log("connected to the database"))
 
 cloudinary.config({
 
@@ -24,7 +25,11 @@ const app =express();
 
 app.use(cors());
 
-app.use("/api/order/checkout/webhook",express.raw({type: "*/*" }))
+// app.use("/api/order/checkout/webhook",express.raw({type: "*/*" }))
+app.use("/api/order/checkout/webhook",async(req:Request,res:Response) =>{
+  console.log('testing 123')
+})
+console.log('testing')
 app.use(express.json())
 app.get("/health",async(req:Request,res:Response) =>{
   res.send({message:"Health is ok"})
