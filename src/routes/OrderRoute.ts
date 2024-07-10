@@ -8,7 +8,7 @@ router.get("/", jwtCheck, jwtParse, OrderController.getMyOrders);
 
 
 router.post(
-    "/api/order/checkout/create-checkout-session",
+    "/checkout/create-checkout-session",
     jwtCheck,
     jwtParse,
     OrderController.createCheckoutSession
