@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import Rent, { CategoryItemType } from "../models/rent";
 import Order from "../models/order";
 
+
 const STRIPE = new Stripe(process.env.STRIPE_API_KEY as string);
 const FRONTEND_URL = process.env.FRONTEND_URL as string;
 const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_WEBHOOK_SECRET as string;
@@ -36,6 +37,11 @@ type CheckoutSessionRequest = {
 };
 
 const stripeWebhookHandler = async (req: Request, res: Response) => {
+  console.log("RECEIEVD EVENT")
+  console.log("======")
+  console.log("event:",req.body)
+  res.send()
+
   let event;
 
   try {
