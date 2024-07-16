@@ -62,7 +62,7 @@ const updateMyRent = async (req: Request, res: Response) => {
       rent.deliveryPrice= req.body.deliveryPrice
       rent.estimatedDeliveryTime = req.body.estimatedDeliveryTime
       rent.machines =req.body.machines
-      rent.categoryItems = req.body.CategoryItems
+      rent.categoryItems = req.body.categoryItems
       rent.lastUpdated = new Date();
 
 
