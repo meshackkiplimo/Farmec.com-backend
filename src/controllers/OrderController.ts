@@ -121,7 +121,7 @@ const createLineItems = (
     );
 
     if (!categoryItem) {
-      throw new Error(`Menu item not found: ${cartItem.categoryItemId}`);
+      throw new Error(`Category item not found: ${cartItem.categoryItemId}`);
     }
 
     const line_item: Stripe.Checkout.SessionCreateParams.LineItem = {
