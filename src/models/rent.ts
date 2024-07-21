@@ -15,7 +15,7 @@ const rentSchema=  new mongoose.Schema({
     user:{type:mongoose.Schema.Types.ObjectId,ref:"User"},
     rentName:{type:String,required:true},
     city:{type:String,required:true},
-    country:{type:String,required:true},
+    county:{type:String,required:true},
     deliveryPrice:{type:Number,required:true},
     estimatedDeliveryTime:{type:Number,required:true},
     machines:[{type:String,required:true}],

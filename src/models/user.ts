@@ -24,10 +24,13 @@ const userSchema = new mongoose.Schema({
         type:String,
 
     },
-    country:{
+    county:{
         type:String,
 
     },
+    phoneNumber:{
+        type:String,
+    }
 })
 const User = mongoose.model("User",userSchema);
 

@@ -35,7 +35,7 @@ const createCurrentUser = async (req:Request,res:Response) =>{
 }
 const updateCurrentUser=async(req:Request,res:Response) => {
     try{
-        const {name,addressLine1,country,city} = req.body
+        const {name,addressLine1,county,city,phoneNumber} = req.body
         const user =  await User.findById(req.userId)
 
 
@@ -45,8 +45,9 @@ const updateCurrentUser=async(req:Request,res:Response) => {
         };
         user.name= name
         user.addressLine1=addressLine1
-        user.country=country
+        user.county=county
         user.city=city
+        user.phoneNumber=phoneNumber
         await user.save()
 
         res.send(user)
