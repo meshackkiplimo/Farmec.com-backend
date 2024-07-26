@@ -19,8 +19,10 @@ export const validateMyUserRequest = [
     body("address").isString().notEmpty().withMessage("address must be a string"),
     body("town").isString().notEmpty().withMessage("town must be  a string"),
 
+
     body("county").isString().notEmpty().withMessage("county must be  a string"),
     body("phoneNumber").isString().notEmpty().withMessage("phoneNumber must be a string"),
+    
     
     handleValidationErrors,
     
