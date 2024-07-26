@@ -14,9 +14,10 @@ const handleValidationErrors =  async(req:Request,res:Response,next:NextFunction
 
 export const validateMyUserRequest = [
    
-    body("name").isString().notEmpty().withMessage("Name must be a string"),
-    body("addressLine1").isString().notEmpty().withMessage("AddressLine1 must be a string"),
-    body("city").isString().notEmpty().withMessage("city must be  a string"),
+    body("firstName").isString().notEmpty().withMessage("Name must be a string"),
+    body("lastName").isString().notEmpty().withMessage("Name must be a string"),
+    body("address").isString().notEmpty().withMessage("address must be a string"),
+    body("town").isString().notEmpty().withMessage("town must be  a string"),
 
     body("county").isString().notEmpty().withMessage("county must be  a string"),
     body("phoneNumber").isString().notEmpty().withMessage("phoneNumber must be a string"),
@@ -30,7 +31,7 @@ export const validateMyUserRequest = [
 export const validateMyRentRequest =[
 
     body("rentName").notEmpty().withMessage("Rent name is required"),
-    body("city").notEmpty().withMessage("city is required"),
+    body("town").notEmpty().withMessage("town is required"),
     body("county").notEmpty().withMessage("county is required"),
     body("deliveryPrice").isFloat({min:0}).withMessage("delivery prize must be a positive number"),
     body("estimatedDeliveryTime").isInt({min:0}).withMessage("estimated delivery time must be a positive integer"),

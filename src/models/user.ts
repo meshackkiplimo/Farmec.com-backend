@@ -12,15 +12,19 @@ const userSchema = new mongoose.Schema({
         type:String,
         required: true
     },
-    name:{
+    firstName:{
         type:String,
         
     },
-    addressLine1:{
+    lastName:{
+        type:String,
+        
+    },
+    address:{
         type:String,
 
     },
-    city:{
+    town:{
         type:String,
 
     },

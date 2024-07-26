@@ -58,7 +58,7 @@ const updateMyRent = async (req: Request, res: Response) => {
 
       }
       rent.rentName =req.body.rentName
-      rent.city =req.body.city
+      rent.town =req.body.town
       rent.deliveryPrice= req.body.deliveryPrice
       rent.estimatedDeliveryTime = req.body.estimatedDeliveryTime
       rent.machines =req.body.machines

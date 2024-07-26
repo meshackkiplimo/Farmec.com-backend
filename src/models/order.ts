@@ -6,9 +6,10 @@ const orderSchema = new mongoose.Schema({
     deliveryDetails:{
 
         email:{type:String,required:true},
-        name:{type:String,required:true},
-        addressLine1: { type: String, required: true },
-        city: { type: String, required: true },
+        firstName:{type:String,required:true},
+        lastName:{type:String,required:true},
+        address: { type: String, required: true },
+        town: { type: String, required: true },
         phoneNumber:{type:String, required:true}
 
 

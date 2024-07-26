@@ -19,7 +19,7 @@ const getRent = async (req: Request, res: Response) => {
 
 const searchRent = async (req: Request, res: Response) => {
   try {
-    const city = req.params.city;
+    const town = req.params.town;
 
     const searchQuery = (req.query.searchQuery as string) || "";
     const selectedMachines = (req.query.selectedMachines as string) || "";
@@ -28,9 +28,9 @@ const searchRent = async (req: Request, res: Response) => {
 
     let query: any = {};
 
-    query["city"] = new RegExp(city, "i");
-    const cityCheck = await Rent.countDocuments(query);
-    if (cityCheck === 0) {
+    query["town"] = new RegExp(town, "i");
+    const townCheck = await Rent.countDocuments(query);
+    if (townCheck === 0) {
       return res.status(404).json({
         data: [],
         pagination: {

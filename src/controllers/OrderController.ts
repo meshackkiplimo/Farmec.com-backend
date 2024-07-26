@@ -27,11 +27,13 @@ type CheckoutSessionRequest = {
     quantity: string;
   }[];
   deliveryDetails: {
-    email: string;
-    name: string;
-    addressLine1: string;
-    city: string;
+   
+    firstName: string;
+    lastName: string;
+    address : string;
+    town: string;
     phoneNumber:string;
+    email: string;
   };
   rentId: string;
 };

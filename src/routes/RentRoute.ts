@@ -18,12 +18,12 @@ RentController.getRent
 
 
 router.get(
-    "/search/:city",
-    param("city")
+    "/search/:town",
+    param("town")
      .isString()
      .trim()
      .notEmpty()
-     .withMessage("City parameter must be a valid string"),
+     .withMessage("town parameter must be a valid string"),
    RentController.searchRent  
 
     )
