@@ -3,9 +3,13 @@ import { Request, Response } from "express";
 import Rent, { CategoryItemType } from "../models/rent";
 import Order from "../models/order";
 
+
 const STRIPE = new Stripe(process.env.STRIPE_API_KEY as string);
 const FRONTEND_URL = process.env.FRONTEND_URL as string;
 const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_WEBHOOK_SECRET as string;
+
+
+
 
 const getMyOrders = async (req: Request, res: Response) => {
   try {

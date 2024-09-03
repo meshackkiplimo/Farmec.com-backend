@@ -79,6 +79,7 @@ const updateMyRent = async (req: Request, res: Response) => {
     }
 }
 
+
 const getMyRentOrders = async (req: Request, res: Response) => {
     try {
       const rent = await Rent.findOne({ user: req.userId });
