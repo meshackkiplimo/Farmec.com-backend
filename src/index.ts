@@ -1,16 +1,14 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import "dotenv/config";
-import mongoose from "mongoose";
+
 import myUserRoute from "./routes/MyUserRoute";
 import { v2 as cloudinary } from "cloudinary";
 import myRentRoute from "./routes/MyRentRoute";
 import rentRoute from "./routes/RentRoute";
 import orderRoute from "./routes/OrderRoute";
+import connectDB from "./config/db";
 
-mongoose
-  .connect(process.env.MONGODB_CONNECTION_STRING as string)
-  .then(() => console.log("succesfullly connected to database!"));
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -32,7 +30,7 @@ app.use("/api/my/user", myUserRoute);
 app.use("/api/my/rent", myRentRoute);
 app.use("/api/rent", rentRoute);
 app.use("/api/order", orderRoute);
-
+connectDB();
 app.listen(7000, () => {
   console.log("server started on localhost:7000");
 });
